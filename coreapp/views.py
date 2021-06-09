@@ -4,17 +4,23 @@ from rest_framework.decorators import api_view
 from django.contrib.auth import login
 from knox.auth import TokenAuthentication
 from knox.views import LoginView as KnoxLoginView
-from blissedmaths.utils import phone_validator, password_generator, otp_generator
+from .utils import phone_validator, password_generator, otp_generator
 from .serializers import (CreateUserSerializer, ChangePasswordSerializer,
                           UserSerializer, LoginUserSerializer, ForgetPasswordSerializer)
-from accounts.models import User, PhoneOTP
+# from accounts.models import User, PhoneOTP
 from django.shortcuts import get_object_or_404
 from django.db.models import Q
 import requests
+from django.db import models
+from django.core.validators import RegexValidator
 
 
 from rest_framework.views import APIView
 
+from django.db import models
+from django.core.validators import RegexValidator
+
+from .models import *
 
 
 class LoginAPI(KnoxLoginView):
@@ -93,9 +99,9 @@ def send_otp(phone):
         phone = str(phone)
         otp_key = str(key)
 
-        #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
+        link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
    
-        #result = requests.get(link, verify=False)
+        result = requests.get(link, verify=False)
 
         return otp_key
     else:
@@ -114,9 +120,9 @@ def send_otp_forgot(phone):
         else:
             name = phone
 
-        #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfgs&templatename=Wisfrags&var1={name}&var2={otp_key}'
+        link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfgs&templatename=Wisfrags&var1={name}&var2={otp_key}'
    
-        #result = requests.get(link, verify=False)
+        result = requests.get(link, verify=False)
         #print(result)
       
         return otp_key

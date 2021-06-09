@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.validators import RegexValidator
 from django.db.models import Q
 from django.db.models.signals import pre_save, post_save
-from blissedmaths.utils import unique_otp_generator
+from .utils import unique_otp_generator
 from django.dispatch import receiver
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save

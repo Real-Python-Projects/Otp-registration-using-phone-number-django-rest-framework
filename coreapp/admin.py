@@ -9,7 +9,7 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .forms import UserAdminCreationForm, UserAdminChangeForm
 
 
-from .models import Profile, PhoneOTP
+from .models import Profile, PhoneOTP,User
 
 admin.site.register(PhoneOTP)
 
@@ -58,6 +58,7 @@ class UserAdmin(BaseUserAdmin):
         if not obj:
             return list()
         return super(UserAdmin, self).get_inline_instances(request, obj)
+
 
 admin.site.register(User, UserAdmin)
 
