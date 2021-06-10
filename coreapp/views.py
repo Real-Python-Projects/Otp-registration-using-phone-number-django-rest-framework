@@ -87,6 +87,16 @@ class ChangePasswordAPI(generics.UpdateAPIView):
 
 
 
+
+import os
+from twilio.rest import Client
+
+
+account_sid = 'ACdc1c1858d065412f288be22c0b814bf7'
+auth_token = 'f154e9da85bc403ea9b4ab0488d24476'
+
+
+
 def send_otp(phone):
     """
     This is an helper function to send otp to session stored phones or 
@@ -99,10 +109,13 @@ def send_otp(phone):
         phone = str(phone)
         otp_key = str(key)
 
-        link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
-   
-        result = requests.get(link, verify=False)
-
+        #link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfrg&templatename=wisfrags&var1={otp_key}'
+        #link = f'https://2factor.in/API/V1/86b7b1a8-c963-11eb-8089-0200cd936042/SMS/{phone}/12345/{otp_key}'
+        # result = requests.get(link, verify=False)
+        client = Client(account_sid, auth_token)
+        msg = f"Ponasasa OTP Testing, your OTP verification code is {otp_key}"
+        call=client.api.account.messages.create(to=phone, from_="+18324153882",body=msg)
+        print(call.sid)
         return otp_key
     else:
         return False
@@ -120,9 +133,13 @@ def send_otp_forgot(phone):
         else:
             name = phone
 
-        link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfgs&templatename=Wisfrags&var1={name}&var2={otp_key}'
+        # link = f'https://2factor.in/API/R1/?module=TRANS_SMS&apikey=fc9e5177-b3e7-11e8-a895-0200cd936042&to={phone}&from=wisfgs&templatename=Wisfrags&var1={name}&var2={otp_key}'
    
-        result = requests.get(link, verify=False)
+        # result = requests.get(link, verify=False)
+        client = Client(account_sid, auth_token)
+        msg = f"Ponasasa OTP Testing, your OTP verification code is {otp_key}"
+        call=client.api.account.messages.create(to=phone, from_="+18324153882",body=msg)
+        print(call.sid)
         #print(result)
       
         return otp_key
@@ -405,7 +422,6 @@ class ForgotValidateOTP(APIView):
     If you have received an otp, post a request with phone and that otp and you will be redirected to reset  the forgotted password
     
     '''
-
     def post(self, request, *args, **kwargs):
         phone = request.data.get('phone', False)
         otp_sent   = request.data.get('otp', False)
